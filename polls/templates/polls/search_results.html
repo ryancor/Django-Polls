@@ -1,0 +1,10 @@
+{% if questioned %}
+	<h1>Results</h1>
+	{% for question in questioned %}
+	<div><li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a><a> -- Total Votes: {{question.total_votes}}</a></li></div>
+	{% endfor %}
+	<a href="{% url 'polls:index' %}"><br />Go Home!</a>
+{% else %}
+	<h3>Could not find any keywords while searching..</h3>
+	<a href="{% url 'polls:index' %}">Try Again!</a>
+{% endif %}

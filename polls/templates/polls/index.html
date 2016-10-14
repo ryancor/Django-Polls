@@ -1,0 +1,37 @@
+<form method="get" action="{% url 'polls:search_results'%}"" class="navbar-form pull-right">
+	<input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Search for polls...">
+	<input type="submit" class="btn" value="Search" >
+</form>
+
+{% if recent_q %}
+	{% if recent_q.first.was_published_recently %}
+	<h1><u>{{ recent_q.count }} Most Recent Polls!</u></h1>
+	{% else %}
+	<h1><u>{{ recent_q.count }} Recent Polls!</u></h1>
+	{% endif %}
+	{% for x in recent_q %}
+	<ul>
+	<li>
+		<a href="{% url 'polls:detail' x.id %}">{{ x.question_text }}</a><a> -- Total Votes: {{ x.total_votes }}</a><br />
+		<a>Posted: {{ x.post_date }}</a>
+	</li>
+	</ul>
+	{% endfor %}
+{% else %}
+	<h4>No Recent Polls.</h4>
+{% endif %}
+
+{% if questioned %}
+	<h1><u>{{ questioned.count }} Polls!</u></h1>
+	{% for question in questioned %}
+	<ul>
+	<li>
+		<a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a><a> -- Total Votes: {{ question.total_votes }}</a><br />
+		<a>Posted: {{ question.post_date }}</a>
+	</li>
+	</ul>
+	{% endfor %}
+{% else %}
+	<h4>No polls are available.</h4>
+{% endif %}
+	
