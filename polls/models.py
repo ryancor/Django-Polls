@@ -54,6 +54,10 @@ class Choice(models.Model):
 	def title(self):
 		return self.question.question_text
 
+	def max_and_min(self):
+		self.objects.all().aggregate(max(votes),
+			sum(votes) / float(len(votes)), min(votes))
+
 	def exists(c):
 		choice = Choice.objects.all()
 		choice = choice.filter(choice_text__iexact=c)
@@ -69,5 +73,3 @@ class Choice(models.Model):
 			return choice.count()
 		else:
 			return 0
-
-
