@@ -4,12 +4,12 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.template import loader
-from .models import Question
+from .models import Question, Search
 from django.db.models import Q
 
 
 def index(request):
-    recent_q = Question.objects.filter(pub_date__range=(datetime.now() 
+    recent_q = Question.objects.filter(pub_date__range=(datetime.now()
         - timedelta(hours=48),datetime.now())).order_by('-pub_date')
     questioned = Question.objects.order_by('-pub_date')[recent_q.count():15]
     context = {'questioned': questioned,
@@ -46,5 +46,7 @@ def search_results(request):
     query = request.GET['q']
     t = loader.get_template('polls/search_results.html')
     questioned = Question.objects.filter(question_text__icontains=query)
-    context = { 'questioned': questioned}
+    search = Search.objects.create(search_text = query, pub_date = datetime.now())
+    search.save()
+    context = { 'questioned': questioned }
     return HttpResponse(t.render(context))

@@ -73,3 +73,10 @@ class Choice(models.Model):
 			return choice.count()
 		else:
 			return 0
+
+class Search(models.Model):
+	search_text = models.CharField(max_length=80)
+	pub_date = models.DateTimeField('date searched')
+
+	def __str__(self):
+		return self.search_text
