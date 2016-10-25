@@ -1,4 +1,5 @@
 import datetime
+import collections
 from django.db import models
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -80,3 +81,12 @@ class Search(models.Model):
 
 	def __str__(self):
 		return self.search_text
+
+	def search_date(q):
+		return q.pub_date.strftime("%m/%d/%Y")
+
+	def repeated_search(sr):
+		x = []
+		for row in sr:
+			x.append(row.search_text[0:])
+		return [item for item, count in collections.Counter(x).items() if count > 1]
