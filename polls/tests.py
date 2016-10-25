@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Question
+from .models import Question, Search
 
 
 class QuestionMethodTests(TestCase):
@@ -54,3 +54,13 @@ class QuestionViewTests(TestCase):
 		response = self.client.get(reverse('polls:index'))
 		self.assertQuerysetEqual(
 			response.context['<Question: Past question.'])
+
+
+class SearchMethodTests(TestCase):
+
+	# Search gets received on BE
+	def test_search_saves(self):
+		search_text = 'sports'
+		time = timezone.now() + datetime.timedelta(days=1)
+		Search.objects.create(search_text=search_text, pub_date=time)
+		return Search.objects.filter(search_text__iexact=search_text)
