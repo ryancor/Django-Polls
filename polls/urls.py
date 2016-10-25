@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.views.generic.base import RedirectView
 from . import views
 
 app_name = 'polls'
@@ -8,4 +9,5 @@ urlpatterns = [
     url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
     url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
     url(r'^search_results/$', views.search_results, name='search_results'),
+    url(r'^.*$', RedirectView.as_view(url='/polls', permanent=False), name='index'),
 ]
