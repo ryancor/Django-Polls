@@ -1,5 +1,6 @@
 import datetime
 import collections
+from collections import Counter
 from django.db import models
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -90,3 +91,8 @@ class Search(models.Model):
 		for row in sr:
 			x.append(row.search_text[0:])
 		return [item for item, count in collections.Counter(x).items() if count > 1]
+
+	def most_common(s):
+		l = [keys for keys in s]
+		results = list((object['search_text'] for object in l))
+		return Counter(results).most_common(1)
