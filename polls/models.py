@@ -96,4 +96,5 @@ class Search(models.Model):
 		s = Search.objects.values(searcher)
 		l = [keys for keys in s]
 		results = list((object['search_text'] for object in l))
-		return Counter(results).most_common(2)
+		c = Counter(results).most_common(2)
+		return " : ".join( repr(e) for e in c )
