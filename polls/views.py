@@ -48,5 +48,6 @@ def search_results(request):
     questioned = Question.objects.filter(question_text__icontains=query)
     search = Search.objects.create(search_text = query, pub_date = datetime.now())
     search.save()
-    context = { 'questioned': questioned }
+    most = Search.most_common("search_text")
+    context = { 'questioned': questioned, 'most': most }
     return HttpResponse(t.render(context))

@@ -92,7 +92,8 @@ class Search(models.Model):
 			x.append(row.search_text[0:])
 		return [item for item, count in collections.Counter(x).items() if count > 1]
 
-	def most_common(s):
+	def most_common(searcher):
+		s = Search.objects.values(searcher)
 		l = [keys for keys in s]
 		results = list((object['search_text'] for object in l))
-		return Counter(results).most_common(1)
+		return Counter(results).most_common(2)
