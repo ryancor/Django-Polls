@@ -44,10 +44,10 @@ class QuestionViewTests(TestCase):
 		self.assertContains(response, "No polls are available.")
 		self.assertQuerysetEqual(response.context['questioned'], [])
 
-	# '/' gets a 404
+	# '/' gets a 302
 	def test_route_404(self):
 		response = self.client.get('/')
-		self.assertEqual(response.status_code, 404)
+		self.assertEqual(response.status_code, 302)
 
 	def text_index_view_with_past_questions(self):
 		create_question(question_text="Past question.", days=-5)
@@ -64,3 +64,10 @@ class SearchMethodTests(TestCase):
 		time = timezone.now() + datetime.timedelta(days=1)
 		Search.objects.create(search_text=search_text, pub_date=time)
 		return Search.objects.filter(search_text__iexact=search_text)
+
+	def repeated_search_counts(self):
+		s = Search.objects.all()
+		results = []
+		for row in s:
+			results.append(row.search_text)
+		len(Search.repeated_search(1)) < len(results)
