@@ -86,11 +86,12 @@ class Search(models.Model):
 	def search_date(q):
 		return q.pub_date.strftime("%m/%d/%Y")
 
-	def repeated_search(sr):
+	def repeated_search(n):
+		s = Search.objects.all()
 		x = []
-		for row in sr:
+		for row in s:
 			x.append(row.search_text[0:])
-		return [item for item, count in collections.Counter(x).items() if count > 1]
+		return [item for item, count in collections.Counter(x).items() if count > n]
 
 	def most_common(searcher):
 		s = Search.objects.values(searcher)
