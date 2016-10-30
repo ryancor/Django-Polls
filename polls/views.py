@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.template import loader
+from django.contrib import messages
 from .models import Question, Search
 from django.db.models import Q
 
@@ -46,8 +47,12 @@ def search_results(request):
     query = request.GET['q']
     t = loader.get_template('polls/search_results.html')
     questioned = Question.objects.filter(question_text__icontains=query)
-    search = Search.objects.create(search_text = query, pub_date = datetime.now())
-    search.save()
-    most = Search.most_common("search_text")
-    context = { 'questioned': questioned, 'most': most }
-    return HttpResponse(t.render(context))
+    if query in [None, '']:
+        m = messages.add_message(request, messages.ERROR, "Can't search empty strings.")
+        return HttpResponse(t.render(m))
+    else:
+        search = Search.objects.create(search_text = query, pub_date = datetime.now())
+        search.save()
+        most = Search.most_common("search_text")
+        context = { 'questioned': questioned, 'most': most }
+        return HttpResponse(t.render(context))
