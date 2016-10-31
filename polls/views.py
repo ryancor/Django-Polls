@@ -1,13 +1,28 @@
 import operator
 from datetime import datetime, timedelta
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, render, render_to_response,redirect
+from django.http import *
 from django.urls import reverse
-from django.template import loader
+from django.template import loader, RequestContext
 from django.contrib import messages
 from .models import Question, Search
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
+
+def login(request):
+    email = password = ''
+    if request.POST:
+        email = request.POST['email']
+        password = request.POST['password']
+
+        user = MyUser.objects.get(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/polls/')
+    return render_to_response('polls/registration/login.html', context_instance=RequestContext(request))
 
 def index(request):
     recent_q = Question.objects.filter(pub_date__range=(datetime.now()

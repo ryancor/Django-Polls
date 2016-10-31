@@ -20,5 +20,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^polls/', include('polls.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^.*$', RedirectView.as_view(url='/polls', permanent=False), name='index'),
+    url(r'^.*$', RedirectView.as_view(url='/polls/', permanent=False), name='index'),
 ]
