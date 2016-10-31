@@ -5,10 +5,12 @@ from django.http import *
 from django.urls import reverse
 from django.template import loader, RequestContext
 from django.contrib import messages
-from .models import Question, Search
+from .models import Question, Search, MyUser
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from polls.forms import *
+from django.views.decorators.csrf import csrf_exempt
 
 
 def login(request):
@@ -23,6 +25,20 @@ def login(request):
                 login(request, user)
                 return HttpResponseRedirect('/polls/')
     return render_to_response('polls/registration/login.html', context_instance=RequestContext(request))
+
+@csrf_exempt
+def signup(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            u = MyUser()
+            user = u.create_user(username=form.cleaned_data['username'], email=form.cleaned_data['email'], date_of_birth=form.cleaned_data['date_of_birth'])
+            user.set_password(self.cleaned_data["password1"])
+            user.save()
+            return HttpResponseRedirect('/polls/')
+    form = RegistrationForm()
+    variables = RequestContext(request, {'form': form})
+    return render_to_response('polls/registration/signup.html',variables)
 
 def index(request):
     recent_q = Question.objects.filter(pub_date__range=(datetime.now()

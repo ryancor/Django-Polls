@@ -2,25 +2,32 @@ import datetime
 import collections
 from collections import Counter
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.utils import timezone
 from datetime import datetime, timedelta
 
 class MyUser(models.Model):
+	username = models.CharField(default='guest', max_length=255, unique=True)
 	email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
 	date_of_birth = models.DateField()
 	joined = models.DateTimeField('date joined')
 	is_active = models.BooleanField(default=True)
 	is_admin = models.BooleanField(default=False)
 
-	USERNAME_FIELD = 'email'
-	REQUIRED_FIELDS = ['date_of_birth']
+	objects = UserManager()
 
-	def create_user(self, email, date_of_birth, password=None):
+	class Meta:
+		db_table = u'my_user'
+
+	USERNAME_FIELD = 'email'
+	REQUIRED_FIELDS = ['username', 'date_of_birth']
+
+	def create_user(self, username, email, date_of_birth, password=None):
 		if not email:
 			raise ValueError('Users must have an email address')
 
 		user = self.model(
+			username=self.normalize_username(username),
 			email=self.normalize_email(email),
 			date_of_birth=date_of_birth,
         )

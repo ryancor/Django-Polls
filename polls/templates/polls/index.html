@@ -2,9 +2,10 @@
 	{{ user.email }}
 	<a href="{% url 'polls:logout' %}">Logout</a><p>
 {% else %}
-	<a href="{% url 'polls:login' %}">Login</a><p>
+	<a href="{% url 'polls:login' %}">Login</a>
+	<a href="{% url 'polls:signup' %}">Signup</a><p>
 {% endif %}
-<form method="get" action="{% url 'polls:search_results'%}"" class="navbar-form pull-right">
+<form method="get" action="{% url 'polls:search_results'%}" class="navbar-form pull-right">
 	<input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Search for polls...">
 	<input type="submit" class="btn" value="Search" >
 </form>

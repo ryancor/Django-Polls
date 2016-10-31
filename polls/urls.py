@@ -7,6 +7,7 @@ app_name = 'polls'
 urlpatterns = [
     url(r'^login/$', auth_views.login, {'template_name': 'polls/registration/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/polls/registration/login.html'}, name='logout'),
+    url(r'^signup/$', views.signup, name='signup'),
     url(r'^$', views.index, name='index'),
     url(r'^(?P<question_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^(?P<question_id>[0-9]+)/results/$', views.results, name='results'),
