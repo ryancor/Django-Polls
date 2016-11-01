@@ -40,10 +40,12 @@ class MyUser(models.Model):
 		return self.email
 
 	def get_full_name(self):
-		return self.email
+		return self.username
 
-	def get_short_name(self):
-		return self.email
+	def get_short_name(n):
+		x = n.username
+		chunks, chunk_size = len(x), len(x)//2
+		return [ x[i:i+chunk_size] for i in range(0, chunks, chunk_size) ]
 
 	def has_perm(self, perm, obj=None):
 		return True
