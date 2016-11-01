@@ -45,7 +45,7 @@ class MyUser(models.Model):
 	def get_short_name(n):
 		x = n.username
 		chunks, chunk_size = len(x), len(x)//2
-		return [ x[i:i+chunk_size] for i in range(0, chunks, chunk_size) ]
+		return ' '.join([ x[i:i+chunk_size] for i in range(0, chunks, chunk_size) ])
 
 	def has_perm(self, perm, obj=None):
 		return True
